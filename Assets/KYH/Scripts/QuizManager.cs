@@ -89,7 +89,7 @@ public struct AiRes     // 저장
 
 #region GET / Quiz - 유니티에서 랜덤 퀴즈를 받아오는 라우트
 // Param: ?time=<unix timestamp>
-public struct QuizRes   // 저장
+public struct QuizRes
 {
     public int idx;
     public string quiz;
@@ -106,7 +106,7 @@ public struct QuizRes   // 저장
 #endregion
 
 #region POST / Count - 퀴즈에 대한 카운트를 업데이트
-public struct CountReq      // 불러오기
+public struct CountReq
 {
     public int number;
     public int correct;
@@ -191,13 +191,23 @@ public class QuizManager : MonoBehaviour
     }
     #endregion
 
-    void GetQuiz()
+    #region GetQuiz()
+    // 서버에서 *랜덤*한 퀴즈를 받아온다. 이후 화면에 받아온 문제를 띄우는 것까지 해야된다.
+    public void GetQuiz()
     {
         StartCoroutine(GetRandomQuiz(url));
     }
 
-    IEnumerator GetRandomQuiz(string url)
+    IEnumerator GetRandomQuiz(string url)       
     {
+        /* 랜덤한 값을 서버에서 어떻게 받아올까?
+            1. 서버에서 받아온 문제들을 리스트에 넣고 리스트 인덱스를 랜덤으로 골라서 화면에 출력
+            2. 애초에 서버에서 랜덤으로 뽑아올 수 있다면..?
+
+
+            화면 출력은 UI 캔버스의 텍스트에 각각의 정보를 대입해주면 된다.
+        */
+
         // 1. url로부터 Get으로 요청을 준비한다.
         UnityWebRequest request = UnityWebRequest.Get(url);
 
@@ -219,6 +229,28 @@ public class QuizManager : MonoBehaviour
             print("퀴즈의 해설은 : " + resData.comment);
         }
     }
+    #endregion
+
+    #region PostCount()
+    // 서버에 현재까지의 퀴즈 진행도?를 전달(업데이트) 한다.
+    public void PostCount()
+    {
+        StartCoroutine(PostQuizCount());
+    }
+
+    IEnumerator PostQuizCount(string url)
+    {
+        // 1. 퀴즈 진행도를 Json 데이터로 변환하기
+        CountReq countData = new CountReq();
+        string countJsonData = JsonUtility.ToJson(countData, true);
+
+        // 2. Post를 하기 위한 준비를 한다.
+
+        // 3. 서버에 Post를 전송하고 응답이 올 때까지 기다린다.
+    }
+
+    #endregion
+
 
     // text 데이터를 파일로 저장하기
     public void SaveJsonData(string json, string path, string fileName)
