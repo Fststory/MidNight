@@ -13,16 +13,16 @@ public class TriggerO : MonoBehaviour
 
     void Update()
     {
-        if (!quizEnum.answerCheck)      // 만약, 정답 체크를 안 했다면
+        if (!quizEnum.answerCheck)      // 만약, 정답 체크를 안 했다면 트리거에 있는지 판단한다.
         {
             if (quizEnum.onTrigger)   // 만약, 트리거에 올라가 있다면
             {
-                if (quizEnum.currentTriggerType == QuizEnum.TriggerType.O && quizManagerKYH.resData.answer)     // 퀴즈의 정답이 true이고 내가 O 발판 위에 있다면
+                if (quizEnum.currentTriggerType == QuizEnum.TriggerType.O && quizManagerKYH.resData.answer == true)     // 퀴즈의 정답이 true이고 내가 O 발판 위에 있다면
                 {
-                    quizManagerKYH.countReq.correct++;
+                    quizManagerKYH.countReq.correct++;      // 맞춘 수를 +1 한다.
                     print("정답은 O 이고 맞췄습니다!");
-                    quizEnum.answerCheck = true;
                 }
+                quizEnum.answerCheck = true;            // 정답 체크를 했다고 표시한다.
             }
         }
     }
@@ -31,13 +31,14 @@ public class TriggerO : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            quizEnum.onTrigger = true;
-            isOnO = true;
+            quizEnum.onTrigger = true;      // 트리거에 올라와 있다고 체크
+            quizEnum.currentTriggerType = QuizEnum.TriggerType.O;       // O 트리거에 올라와 있다고 체크
         }
     }
 
     private void OnTriggerExit(Collider other)      // 발판에서 나오면 정답 유무 판별을 하지 않는다.
     {
-        quizEnum.onTrigger = false;
+        quizEnum.onTrigger = false;     // 트리거에서 내려왔다고 체크
+        quizEnum.currentTriggerType = QuizEnum.TriggerType.None;       // 아무 트리거에도 올라와 있지 않다고 체크
     }
 }
