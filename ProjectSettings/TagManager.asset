@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Panel
   - Hat
+  - Ribbon
+  - Wing
   layers:
   - Default
   - TransparentFX
