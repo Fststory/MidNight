@@ -64,6 +64,7 @@ public class ShopManager : MonoBehaviour
         {
             ToggleShopUI();
         }
+        UpdatePlayerPointsText();
     }
 
     private void ToggleShopUI()
