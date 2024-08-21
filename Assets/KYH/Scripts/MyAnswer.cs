@@ -56,7 +56,7 @@ public class MyAnswer : MonoBehaviour
             }
         }
         quizManagerKYH.PutCount();      // 채점 후 서버 DB에 Put Count 한다.
-        Invoke("NextQuiz", 5.0f);
+        Invoke("NextQuiz", quizManagerKYH.nextTime);
     }
 
     void NextQuiz()
