@@ -25,11 +25,23 @@ public class ShopItem : MonoBehaviour
 
         // 버튼 클릭 이벤트에 ShopManager에 현재 아이템 정보를 전달하도록 설정
         buyButton.onClick.AddListener(OnButtonClick);
+
+        // 아이템이 이미 구매된 경우 버튼을 비활성화
+        if (!buyButton.interactable)
+        {
+            buyButton.interactable = false;
+        }
     }
 
     private void OnButtonClick()
     {
         // ShopManager를 통해 아이템 구매 요청
-        shopManager.OnBuyItem(this);
+        bool purchaseSuccessful = shopManager.OnBuyItem(this);
+
+        // 아이템이 성공적으로 구매된 경우에만 버튼을 비활성화
+        if (purchaseSuccessful)
+        {
+            buyButton.interactable = false;
+        }
     }
 }

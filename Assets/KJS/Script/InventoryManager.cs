@@ -21,11 +21,19 @@ public class InventoryManager : MonoBehaviour
 
     void Start()
     {
-        // 게임 시작 시 모든 슬롯의 아이콘과 버튼을 비활성화
+        // 게임 시작 시 모든 슬롯의 아이콘과 버튼의 이미지 비활성화
         foreach (InventorySlot slot in inventorySlots)
         {
             slot.icon.enabled = false;  // 아이콘 비활성화
             slot.button.interactable = false;  // 버튼 비활성화
+
+            // 버튼의 이미지 컴포넌트 비활성화
+            Image buttonImage = slot.button.GetComponent<Image>();
+            if (buttonImage != null)
+            {
+                buttonImage.enabled = false;
+            }
+
             slot.button.onClick.AddListener(() => OnSlotClick(slot));  // 클릭 이벤트 추가
         }
 
@@ -70,18 +78,25 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    // 인벤토리에 아이템 추가 (아이콘과 버튼 활성화)
+    // 인벤토리에 아이템 추가 (아이콘과 버튼 이미지 활성화)
     public void AddItem(ShopItem shopItem)
     {
         foreach (InventorySlot slot in inventorySlots)
         {
             if (slot.itemName == shopItem.itemName)
             {
-                // 아이콘과 버튼을 활성화
+                // 아이콘 활성화
                 if (!slot.icon.enabled)
                 {
                     slot.icon.enabled = true;
                     slot.button.interactable = true;  // 버튼 활성화
+
+                    // 버튼의 이미지 컴포넌트 활성화
+                    Image buttonImage = slot.button.GetComponent<Image>();
+                    if (buttonImage != null)
+                    {
+                        buttonImage.enabled = true;
+                    }
                 }
 
                 // 스프라이트 설정
