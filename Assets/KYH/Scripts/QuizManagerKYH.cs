@@ -141,7 +141,7 @@ public class QuizRes33
 }
 #endregion
 
-#region POST / Count - 퀴즈에 대한 카운트를 업데이트
+#region PUT / Count - 퀴즈에 대한 카운트를 업데이트
 public struct CountReq
 {
     public int id;
@@ -158,20 +158,22 @@ public struct CountReq
 
 public class QuizManagerKYH : MonoBehaviour
 {
+    // 서버에서 문제를 Get 하고, 플레이어가 문제를 풀면, 그에 대한 정보를 서버에 Put 하는 클래스
+
     public string getUrl;
-    public string postUrl;
+    public string putUrl;
     public QuizRes resData;
     public CountReq countReq = new CountReq();      // 전달할 Request의 인스턴스 생성
 
+    public MyAnswer myAns;
+
     public FindPlayers players;
 
-    public Text id, quiz, answer, comment;
+    public Text id, quiz, answer, comment, answerTitle, commentTitle;
 
     void Start()
     {
-        //GetList();
         GetQuiz();
-        Invoke("PostCount", 10.0f);
     }
 
     #region GetList() 연습
@@ -238,22 +240,20 @@ public class QuizManagerKYH : MonoBehaviour
     // 서버에서 *랜덤*한 퀴즈를 받아온다. 이후 화면에 받아온 문제를 띄우는 것까지 해야된다.
     public void GetQuiz()
     {
+        answerTitle.color = new Color(0, 0, 0, 0);      // 문제를 출제할 때 정답과 해설의 포멧은 보이지 않는다.
+        commentTitle.color = new Color(0, 0, 0, 0);
+        answer.color = new Color(0, 0, 0, 0);
+        comment.color = new Color(0, 0, 0, 0);
         StartCoroutine(GetRandomQuiz(getUrl));
     }
 
-    IEnumerator GetRandomQuiz(string url)       
-    {
-        /* 랜덤한 값을 서버에서 어떻게 받아올까?
-            1. 서버에서 받아온 문제들을 리스트에 넣고 리스트 인덱스를 랜덤으로 골라서 화면에 출력
-            2. 애초에 서버에서 랜덤으로 뽑아올 수 있다면..?
-
-        => 서버에서 랜덤 문제 뿌려주기로 했음!!
-
-            화면 출력은 UI 캔버스의 텍스트에 각각의 정보를 대입해주면 된다.
-        */
+    IEnumerator GetRandomQuiz(string url)
+    {         
+        // 서버에서 랜덤 문제 뿌려주기로 했음!!
+        // 화면 출력은 UI 캔버스의 텍스트에 각각의 정보를 대입해주면 된다.
 
         // 1. url로부터 Get으로 요청을 준비한다.
-        UnityWebRequest request = UnityWebRequest.Get(url);
+        UnityWebRequest request = UnityWebRequest.Get(url);     // getUrl = http://172.16.16.81:8080/entity/quizzes/random
 
         // 2. 준비된 요청을 서버에 전달하고 응답이 올때까지 기다린다.
         yield return request.SendWebRequest();
@@ -264,62 +264,57 @@ public class QuizManagerKYH : MonoBehaviour
             // 4. 텍스트를 받는다. QuizRes 내용을 Json(string) 형태로
             string result = request.downloadHandler.text;
 
-            // 5. 응답 받은 json 데이터를 ListRes 구조체 형태로 인스턴스에 파싱한다.
+            // 5. 응답 받은 json 데이터를 QuizRes 구조체 형태로 인스턴스에 파싱한다.
             QuizRes33 resData1 = JsonUtility.FromJson<QuizRes33>(result);
             resData = resData1.result.quiz;
 
-            //print("퀴즈의 번호는 : " + resData.id);
-            //print("퀴즈의 내용은 : " + resData.quiz);
-            //print("퀴즈의 정답은 : " + resData.answer);
-            //print("퀴즈의 해설은 : " + resData.comment);
             id.text = resData.id.ToString();
             quiz.text = resData.quiz;
             answer.text = resData.answer.ToString();
             comment.text = resData.comment;
+            
+            Invoke("OpenAnswer", 5.0f);     // 5초의 카운트 후 정답과 해설을 공개한다. **************************************************
         }
+    }
+
+    void OpenAnswer()       // 카운트가 끝나면 정답과 해설을 출력한다.
+    {
+        answerTitle.color = new Color(0, 0, 0, 1);
+        commentTitle.color = new Color(0, 0, 0, 1);
+        answer.color = new Color(0, 0, 0, 1);
+        comment.color = new Color(0, 0, 0, 1);
+        myAns.checkTime = true;
     }
     #endregion
 
-    #region PostCount()
+    #region PutCount()
     // 서버에 현재까지의 퀴즈 진행도?를 전달(업데이트) 한다.
-    public void PostCount()
+    public void PutCount()
     {
-        StartCoroutine(PostQuizCount(postUrl));
+        StartCoroutine(PutQuizCount(putUrl));
     }
 
-    IEnumerator PostQuizCount(string url)
+    IEnumerator PutQuizCount(string url)
     {
         // 1. 퀴즈 진행도를 Json 데이터로 변환하기
 
-        // CountReq 인스턴스(countData)에 Post할 내용을 기록해야 됨
+        // CountReq 인스턴스(countData)에 Put할 내용을 기록해야 됨
         countReq.id = resData.id;                                       // 문제의 번호
-        /*countReq.correct =      ; */                                  // 문제를 맞춘 사람의 수 (Trigger에서 판단해서 전달해 줌)
-        countReq.players = players.playerObjects.Count;      
-        // 현재 플레이 중인 사람의 수
+        /*countReq.correct =      ; */                                  // 문제를 맞춘 사람의 수 (MyAnswer.AnswerCheck()에서 판단해서 전달해 줌)
+        countReq.players = players.playerObjects.Count;                 // 현재 플레이 중인 사람의 수
 
         string countJsonData = JsonUtility.ToJson(countReq, true);     // 인스턴스를 Json으로 바꾼다.
 
         print(countJsonData);
 
-        // 2. Post를 하기 위한 준비를 한다.
-        UnityWebRequest request = UnityWebRequest.Put(url, countJsonData);
+        // 2. Put를 하기 위한 준비를 한다.
+        UnityWebRequest request = UnityWebRequest.Put(url + countReq.id, countJsonData);    // putUrl = http://172.16.16.81:8080/entity/quizzes/
+        request.SetRequestHeader("Content-Type", "application/json");
 
-        // 3. 서버에 Post를 전송하고 응답이 올 때까지 기다린다.
+        // 3. 서버에 Put를 전송하고 응답이 올 때까지 기다린다.
         yield return request.SendWebRequest();
 
-        //if (request.result == UnityWebRequest.Result.Success)
-        //{
-        //    // 다운로드 핸들러에서 텍스트 값을 받아서 UI에 출력한다.
-        //    string response = request.downloadHandler.text;
-        //    text_response.text = response;
-        //    Debug.LogWarning(response);
-        //}
-        //else
-        //{
-        //    text_response.text = request.error;
-        //    Debug.LogError(request.error);
-        //}
+        print(request.downloadHandler.text);
     }
-
     #endregion
 }

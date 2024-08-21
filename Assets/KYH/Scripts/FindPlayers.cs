@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class FindPlayers : MonoBehaviour
 {
+    // 맵에 있는 플레이어 태그를 가진 오브젝트를 리스트에 담는다.
+    // Put Count()의 players를 세기 위한 클래스                          GPT 이용
+
     public List<GameObject> playerObjects = new List<GameObject>();
 
     void Start()
