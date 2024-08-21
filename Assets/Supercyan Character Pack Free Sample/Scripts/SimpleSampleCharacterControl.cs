@@ -192,7 +192,9 @@ namespace Supercyan.FreeSample
                 m_currentDirection = Vector3.Slerp(m_currentDirection, direction, Time.deltaTime * m_interpolation);
 
                 transform.rotation = Quaternion.LookRotation(m_currentDirection);
-                transform.position += m_currentDirection * m_moveSpeed * Time.deltaTime;
+
+                // transform.position += m_currentDirection * m_moveSpeed * Time.deltaTime;
+                m_rigidBody.velocity = m_currentDirection * m_moveSpeed;
 
                 m_animator.SetFloat("MoveSpeed", direction.magnitude);
             }
