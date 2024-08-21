@@ -23,6 +23,9 @@ public class ShopManager : MonoBehaviour
 
     private Coroutine fadeOutCoroutine; // 현재 실행 중인 코루틴을 추적
 
+    public AudioSource audioSource;  // 사운드를 재생할 AudioSource
+    public AudioClip toggleSound;    // UI 전환 시 재생할 사운드 클립
+
     void Start()
     {
         UpdatePlayerPointsText();
@@ -37,10 +40,6 @@ public class ShopManager : MonoBehaviour
         if (shop != null)
         {
             shop.SetActive(false);
-        }
-        else
-        {
-            Debug.LogError("Shop Scroll View is not assigned in the inspector!");
         }
     }
 
@@ -72,12 +71,13 @@ public class ShopManager : MonoBehaviour
         if (shop != null)
         {
             bool isActive = shop.activeSelf;
-            shop.SetActive(!isActive); // Scroll View의 현재 상태를 반대로 전환
-            Debug.Log("Shop UI toggled. Now active: " + !isActive);
-        }
-        else
-        {
-            Debug.LogError("Shop Scroll View is not assigned in the inspector!");
+            shop.SetActive(!isActive);
+
+            // 사운드 재생
+            if (audioSource != null && toggleSound != null)
+            {
+                audioSource.PlayOneShot(toggleSound);
+            }
         }
     }
 

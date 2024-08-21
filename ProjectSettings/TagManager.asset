@@ -10,6 +10,7 @@ TagManager:
   - Wing
   - TriggerO
   - TriggerX
+  - Ground
   layers:
   - Default
   - TransparentFX
@@ -46,4 +47,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: OutLine
+    uniqueID: 2420562181
+    locked: 0
+  - name: UI
+    uniqueID: 1573231423
     locked: 0
