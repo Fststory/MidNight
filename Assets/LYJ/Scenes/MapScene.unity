@@ -2667,10 +2667,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.2
   m_Height: 1
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!1 &1102857005
 GameObject:
   m_ObjectHideFlags: 0
@@ -5822,6 +5822,16 @@ PrefabInstance:
       propertyPath: myAns
       value: 
       objectReference: {fileID: 1098131554}
+    - target: {fileID: 1921490312404510989, guid: dd56a12936f637c49a12aad5df4162c0,
+        type: 3}
+      propertyPath: nextTime
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1921490312404510989, guid: dd56a12936f637c49a12aad5df4162c0,
+        type: 3}
+      propertyPath: initialTime
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 3554358001216703412, guid: dd56a12936f637c49a12aad5df4162c0,
         type: 3}
       propertyPath: m_SizeDelta.x

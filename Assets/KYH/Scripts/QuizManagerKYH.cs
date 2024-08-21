@@ -167,11 +167,14 @@ public class QuizManagerKYH : MonoBehaviour
     public Text quiz, answer, comment, answerTitle, commentTitle, timer;
 
     bool timerStart = false;
-    public float currentTime = 5.0f;
+    public float initialTime; // 인스펙터에서 설정할 수 있는 초기 시간
+    public float nextTime;  // 다음 퀴즈가 나오는 시간
+    float currentTime;
 
     void Start()
     {
         GetQuiz();
+        currentTime = initialTime;  // 초기 시간 설정
     }
 
     private void Update()
@@ -184,7 +187,7 @@ public class QuizManagerKYH : MonoBehaviour
             if (currentTime <= 0.0f)
             {
                 timerStart = false;
-                currentTime = 5.0f;
+                currentTime = initialTime;
             }
         }
     }
@@ -294,15 +297,20 @@ public class QuizManagerKYH : MonoBehaviour
             comment.text = resData.comment;
 
             timerStart = true;
-            Invoke("OpenAnswer", 5.0f);     // 5초의 카운트 후 정답과 해설을 공개한다. **************************************************
+            Invoke("OpenAnswer1", initialTime);     // 설정된 시간만큼 카운트 후 정답을 공개한다.
+            Invoke("OpenAnswer2", initialTime + 2.0f);      // 정답 공개 후 2초 뒤 해설을 공개한다.
         }
     }
 
-    void OpenAnswer()       // 카운트가 끝나면 정답과 해설을 출력한다.
+    void OpenAnswer1()       // 카운트가 끝나면 정답과 해설을 출력한다.
     {
         answerTitle.color = new Color(0, 0, 0, 1);
-        commentTitle.color = new Color(0, 0, 0, 1);
         answer.color = new Color(0, 0, 0, 1);
+    }
+
+    void OpenAnswer2()
+    {
+        commentTitle.color = new Color(0, 0, 0, 1);
         comment.color = new Color(0, 0, 0, 1);
         myAns.checkTime = true;
     }
