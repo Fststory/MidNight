@@ -8,6 +8,8 @@ TagManager:
   - Hat
   - Ribbon
   - Wing
+  - TriggerO
+  - TriggerX
   layers:
   - Default
   - TransparentFX
