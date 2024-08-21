@@ -1,70 +1,34 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
-    [Header("Movement Settings")]
-    public float moveSpeed = 15f;
-    public float turnSpeed = 720f;
-    private Vector3 movement;
-    private Vector3 desiredDirection;
-
-    [Header("Camera")]
-    private Transform cameraTransform;
-
-    private Rigidbody rb;
-    private Animator anim;
-
-    [Header("Animations")]
-    private int runID;
-
-    private void Awake()
-    {
-        anim = GetComponent<Animator>();
-    }
-
-    void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-        cameraTransform = Camera.main.transform;
-        runID = Animator.StringToHash("isRun");
-    }
+    public float moveSpeed = 5.0f; // 플레이어의 이동 속도
+    public Transform cameraTransform; // 메인 카메라의 Transform
 
     void Update()
     {
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
-        movement = new Vector3(horizontal, 0f, vertical).normalized;
-    }
+        // 입력 값을 받음
+        float horizontal = Input.GetAxis("Horizontal"); // A/D 또는 좌/우 화살표
+        float vertical = Input.GetAxis("Vertical"); // W/S 또는 상/하 화살표
 
-    void FixedUpdate()
-    {
-        Move();
-    }
+        // 카메라의 전방 및 우측 방향 계산
+        Vector3 forward = cameraTransform.forward;
+        Vector3 right = cameraTransform.right;
 
-    void Move()
-    {
-        // 카메라 기준 이동 방향 계산
-        Vector3 cameraForward = cameraTransform.forward;
-        Vector3 cameraRight = cameraTransform.right;
+        // 수평면에서의 이동을 위해 y 값을 0으로 만듦
+        forward.y = 0f;
+        right.y = 0f;
 
-        cameraForward.y = 0;
-        cameraRight.y = 0;
+        // 입력 값을 사용하여 이동 방향 계산
+        Vector3 moveDirection = (forward * vertical + right * horizontal).normalized;
 
-        cameraForward.Normalize();
-        cameraRight.Normalize();
+        // 플레이어를 이동시킴
+        transform.position += moveDirection * moveSpeed * Time.deltaTime;
 
-        desiredDirection = cameraForward * movement.z + cameraRight * movement.x;
-
-        // 이동 적용
-        if (desiredDirection != Vector3.zero)
+        // 플레이어가 움직이는 방향으로 회전하도록 설정
+        if (moveDirection != Vector3.zero)
         {
-            rb.MovePosition(rb.position + desiredDirection * moveSpeed * Time.fixedDeltaTime);
-            Quaternion targetRotation = Quaternion.LookRotation(desiredDirection);
-            rb.MoveRotation(Quaternion.RotateTowards(rb.rotation, targetRotation, turnSpeed * Time.fixedDeltaTime));
+            transform.forward = moveDirection;
         }
-
-        // 애니메이션 설정
-        anim.SetBool(runID, desiredDirection != Vector3.zero);
     }
 }
