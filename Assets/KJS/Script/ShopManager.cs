@@ -13,7 +13,8 @@ public class ShopManager : MonoBehaviour
     public GameObject shopUICanvas;  // 상점 UI 전체를 담고 있는 Canvas
     public InventoryManager inventoryManager;
 
-    private int playerPoints = 200;
+    public int playerPoints = 0;
+
     private float fadeDuration = 2f; // 서서히 사라지는 시간
     private float displayDuration = 1f; // 글자가 완전히 보이는 시간
 
