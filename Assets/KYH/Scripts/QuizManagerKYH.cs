@@ -2,12 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;   // http 통신을 위한 네임 스페이스
-using System.Text;      // json, csv같은 문서 형태의 인코딩(UTF-8)을 위한 네임 스페이스
 using UnityEngine.UI;
-using System;
-using System.IO;
-using UnityEditor;
-using static UnityEngine.UIElements.UxmlAttributeDescription;
 
 // Request: 내가 주는 Json / Response: 내가 받아 오는 Json
 
@@ -184,7 +179,8 @@ public class QuizManagerKYH : MonoBehaviour
         if (timerStart)
         {
             currentTime -= Time.deltaTime;
-            timer.text = Mathf.FloorToInt(currentTime).ToString();
+            timer.text = Mathf.Max(Mathf.FloorToInt(currentTime) + 1, 0).ToString();
+
             if (currentTime <= 0.0f)
             {
                 timerStart = false;
@@ -265,7 +261,7 @@ public class QuizManagerKYH : MonoBehaviour
     }
 
     IEnumerator GetRandomQuiz(string url)
-    {         
+    {
         // 서버에서 랜덤 문제 뿌려주기로 했음!!
         // 화면 출력은 UI 캔버스의 텍스트에 각각의 정보를 대입해주면 된다.
 
@@ -284,7 +280,7 @@ public class QuizManagerKYH : MonoBehaviour
             // 5. 응답 받은 json 데이터를 QuizRes 구조체 형태로 인스턴스에 파싱한다.
             QuizRes33 resData1 = JsonUtility.FromJson<QuizRes33>(result);
             resData = resData1.result.quiz;
-                    
+
             quiz.text = resData.quiz;
             if (resData.answer)
             {

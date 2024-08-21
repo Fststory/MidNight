@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MyAnswer : MonoBehaviour
@@ -38,7 +36,7 @@ public class MyAnswer : MonoBehaviour
 
         if (isOn)   // 발판 트리거에 올라와 있다면..
         {
-            if(quizManagerKYH.resData.answer == true)    // 퀴즈의 정답이 O 라면..
+            if (quizManagerKYH.resData.answer == true)    // 퀴즈의 정답이 O 라면..
             {
                 if (myAnswerType == MyAnswer.MyAnswerType.O)    // 내가 제출한 답이 O 라면..
                 {
@@ -47,7 +45,7 @@ public class MyAnswer : MonoBehaviour
                     print("정답은 O 이고 맞췄습니다!");
                 }
             }
-            else if(quizManagerKYH.resData.answer == false)  // 퀴즈의 정답이 X 라면..
+            else if (quizManagerKYH.resData.answer == false)  // 퀴즈의 정답이 X 라면..
             {
                 if (myAnswerType == MyAnswer.MyAnswerType.X)    // 내가 제출한 답이 X 라면..
                 {
@@ -77,6 +75,15 @@ public class MyAnswer : MonoBehaviour
         {
             myAnswerType = MyAnswer.MyAnswerType.X;
             isOn = true;      // 트리거에 올라와 있다고 체크
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("TriggerO") || other.CompareTag("TriggerX"))
+        {
+            myAnswerType = MyAnswer.MyAnswerType.None;
+            isOn = false;
         }
     }
 }
