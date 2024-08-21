@@ -120,187 +120,190 @@ public struct CountReq
 }
 #endregion
 
-public class QuizManager : MonoBehaviour
-{
-    public string url;
+//public class QuizManager : MonoBehaviour
+//{
+//    public string url;
     
 
-    void Start()
-    {
-        //GetList();
-        GetQuiz();
-    }
+//    void Start()
+//    {
+//        //GetList();
+//        GetQuiz();
+//    }
 
-    #region GetList() 연습
-    // 서버에서 OX퀴즈 목록을 GET하는 함수
-    public Text text_result;
-    public ListRes listResData;
+//    #region GetList() 연습
+//    // 서버에서 OX퀴즈 목록을 GET하는 함수
+//    public Text text_result;
+//    public ListRes listResData;
 
-    public void GetList()
-    {
-        //btn_getJson.interactable = false;
-        StartCoroutine(GetQuizList(url));       // url에서 퀴즈 목록 Get 요청을 한다.
-    }
+//    public void GetList()
+//    {
+//        //btn_getJson.interactable = false;
+//        StartCoroutine(GetQuizList(url));       // url에서 퀴즈 목록 Get 요청을 한다.
+//    }
 
-    IEnumerator GetQuizList(string url)
-    {
-        // 1. url로부터 Get으로 요청을 준비한다.
-        UnityWebRequest request = UnityWebRequest.Get(url);
+//    IEnumerator GetQuizList(string url)
+//    {
+//        // 1. url로부터 Get으로 요청을 준비한다.
+//        UnityWebRequest request = UnityWebRequest.Get(url);
 
-        // 2. 준비된 요청을 서버에 전달하고 응답이 올때까지 기다린다.
-        yield return request.SendWebRequest();
+//        // 2. 준비된 요청을 서버에 전달하고 응답이 올때까지 기다린다.
+//        yield return request.SendWebRequest();
 
-        // 3. 만일, 응답이 성공이라면...
-        if (request.result == UnityWebRequest.Result.Success)
-        {
-            // 4. 텍스트를 받는다. ListRes 내용을 Json(string) 형태로
-            string result = request.downloadHandler.text;
-            //string result = "{\"id\":1,\"quiz\":\"지구는 태양 주위를 돈다.\",\"answer\":true,\"comment\":\"해설\"}";
-            // print(result); <= Json 형태 그대로 출력됨
+//        // 3. 만일, 응답이 성공이라면...
+//        if (request.result == UnityWebRequest.Result.Success)
+//        {
+//            // 4. 텍스트를 받는다. ListRes 내용을 Json(string) 형태로
+//            string result = request.downloadHandler.text;
+//            //string result = "{\"id\":1,\"quiz\":\"지구는 태양 주위를 돈다.\",\"answer\":true,\"comment\":\"해설\"}";
+//            // print(result); <= Json 형태 그대로 출력됨
 
-            // 5. 응답 받은 json 데이터를 ListRes 구조체 형태로 인스턴스에 파싱한다.
-            ListRes resData = JsonUtility.FromJson<ListRes>(result);
-            // print(resData); <= ListRes 가 출력됨
+//            // 5. 응답 받은 json 데이터를 ListRes 구조체 형태로 인스턴스에 파싱한다.
+//            ListRes resData = JsonUtility.FromJson<ListRes>(result);
+//            // print(resData); <= ListRes 가 출력됨
 
-            string resList = JsonUtility.ToJson(resData, true);
-            // print(resList); <= value가 모두 초기값인 ListRes 형태가 출력됨.
-        }
+//            string resList = JsonUtility.ToJson(resData, true);
+//            // print(resList); <= value가 모두 초기값인 ListRes 형태가 출력됨.
+//        }
 
-        //    // 6. 해당 인스턴스를 byte[]로 전환한다.
-        //    //byte[] binaries = Encoding.UTF8.GetBytes(reqImageData.img);
-        //    byte[] binaries = Convert.FromBase64String(reqImageData.img);
+//        //    // 6. 해당 인스턴스를 byte[]로 전환한다.
+//        //    //byte[] binaries = Encoding.UTF8.GetBytes(reqImageData.img);
+//        //    byte[] binaries = Convert.FromBase64String(reqImageData.img);
 
-        //    if (binaries.Length > 0)
-        //    {
-        //        Texture2D texture = new Texture2D(184, 273);
+//        //    if (binaries.Length > 0)
+//        //    {
+//        //        Texture2D texture = new Texture2D(184, 273);
 
-        //        // byte 배열로 된 raw 데이터를 텍스쳐 형태로 변환해서 texture2D 인스턴스로 변환한다.
-        //        texture.LoadImage(binaries);
-        //        img_response.texture = texture;
+//        //        // byte 배열로 된 raw 데이터를 텍스쳐 형태로 변환해서 texture2D 인스턴스로 변환한다.
+//        //        texture.LoadImage(binaries);
+//        //        img_response.texture = texture;
 
-        //    }
-        //}
-        //// 그렇지 않다면...
-        //else
-        //{
-        //    // 에러 내용을 text_response에 전달한다.
-        //    text_response.text = request.responseCode + ": " + request.error;
-        //    Debug.LogError(request.responseCode + ": " + request.error);
-        //}
-        //btn_getJson.interactable = true;
-    }
-    #endregion
+//        //    }
+//        //}
+//        //// 그렇지 않다면...
+//        //else
+//        //{
+//        //    // 에러 내용을 text_response에 전달한다.
+//        //    text_response.text = request.responseCode + ": " + request.error;
+//        //    Debug.LogError(request.responseCode + ": " + request.error);
+//        //}
+//        //btn_getJson.interactable = true;
+//    }
+//    #endregion
 
-    #region GetQuiz()
-    // 서버에서 *랜덤*한 퀴즈를 받아온다. 이후 화면에 받아온 문제를 띄우는 것까지 해야된다.
-    public void GetQuiz()
-    {
-        StartCoroutine(GetRandomQuiz(url));
-    }
+//    #region GetQuiz()
+//    // 서버에서 *랜덤*한 퀴즈를 받아온다. 이후 화면에 받아온 문제를 띄우는 것까지 해야된다.
+//    public void GetQuiz()
+//    {
+//        StartCoroutine(GetRandomQuiz(url));
+//    }
 
-    IEnumerator GetRandomQuiz(string url)       
-    {
-        /* 랜덤한 값을 서버에서 어떻게 받아올까?
-            1. 서버에서 받아온 문제들을 리스트에 넣고 리스트 인덱스를 랜덤으로 골라서 화면에 출력
-            2. 애초에 서버에서 랜덤으로 뽑아올 수 있다면..?
-
-
-            화면 출력은 UI 캔버스의 텍스트에 각각의 정보를 대입해주면 된다.
-        */
-
-        // 1. url로부터 Get으로 요청을 준비한다.
-        UnityWebRequest request = UnityWebRequest.Get(url);
-
-        // 2. 준비된 요청을 서버에 전달하고 응답이 올때까지 기다린다.
-        yield return request.SendWebRequest();
-
-        // 3. 만일, 응답이 성공이라면...
-        if (request.result == UnityWebRequest.Result.Success)
-        {
-            // 4. 텍스트를 받는다. QuizRes 내용을 Json(string) 형태로
-            string result = request.downloadHandler.text;
-
-            // 5. 응답 받은 json 데이터를 ListRes 구조체 형태로 인스턴스에 파싱한다.
-            QuizRes resData = JsonUtility.FromJson<QuizRes>(result);
-
-            print("퀴즈의 번호는 : " + resData.idx);
-            print("퀴즈의 내용은 : " + resData.quiz);
-            print("퀴즈의 정답은 : " + resData.answer);
-            print("퀴즈의 해설은 : " + resData.comment);
-        }
-    }
-    #endregion
-
-    #region PostCount()
-    // 서버에 현재까지의 퀴즈 진행도?를 전달(업데이트) 한다.
-    public void PostCount()
-    {
-        StartCoroutine(PostQuizCount());
-    }
-
-    IEnumerator PostQuizCount(string url)
-    {
-        // 1. 퀴즈 진행도를 Json 데이터로 변환하기
-        CountReq countData = new CountReq();
-        string countJsonData = JsonUtility.ToJson(countData, true);
-
-        // 2. Post를 하기 위한 준비를 한다.
-
-        // 3. 서버에 Post를 전송하고 응답이 올 때까지 기다린다.
-    }
-
-    #endregion
+//    IEnumerator GetRandomQuiz(string url)       
+//    {
+//        /* 랜덤한 값을 서버에서 어떻게 받아올까?
+//            1. 서버에서 받아온 문제들을 리스트에 넣고 리스트 인덱스를 랜덤으로 골라서 화면에 출력
+//            2. 애초에 서버에서 랜덤으로 뽑아올 수 있다면..?
 
 
-    // text 데이터를 파일로 저장하기
-    public void SaveJsonData(string json, string path, string fileName)
-    {
-        // 1. 파일 스트림을 쓰기 형태로 연다.
-        //string fullPath = path + "/" + fileName;
-        string fullPath = Path.Combine(path, fileName);
-        FileStream fs = new FileStream(fullPath, FileMode.OpenOrCreate, FileAccess.Write);
+//            화면 출력은 UI 캔버스의 텍스트에 각각의 정보를 대입해주면 된다.
+//        */
 
-        // 2. 스트림에 json 데이터를 쓰기로 전달한다.
-        byte[] jsonBinary = Encoding.UTF8.GetBytes(json);
-        fs.Write(jsonBinary);
+//        // 1. url로부터 Get으로 요청을 준비한다.
+//        UnityWebRequest request = UnityWebRequest.Get(url);
 
-        // 3. 스트림을 닫아준다.
-        fs.Close();
-    }
+//        // 2. 준비된 요청을 서버에 전달하고 응답이 올때까지 기다린다.
+//        yield return request.SendWebRequest();
 
-    // text 파일을 읽어오기
-    public string ReadJsonData(string path, string fileName)
-    {
-        string readText;
-        string fullPath = Path.Combine(path, fileName);
+//        // 3. 만일, 응답이 성공이라면...
+//        if (request.result == UnityWebRequest.Result.Success)
+//        {
+//            // 4. 텍스트를 받는다. QuizRes 내용을 Json(string) 형태로
+//            string result = request.downloadHandler.text;
 
-        // 예외 처리 : 해당 경로에 값이 파일이 존재하는지를 먼저 확인한다.
-        bool isDirectoryExist = Directory.Exists(path);
+//            // 5. 응답 받은 json 데이터를 ListRes 구조체 형태로 인스턴스에 파싱한다.
+//            QuizRes resData = JsonUtility.FromJson<QuizRes>(result);
 
-        if (isDirectoryExist)
-        {
-            bool isFileExist = File.Exists(fullPath);
+//            print("퀴즈의 번호는 : " + resData.idx);
+//            print("퀴즈의 내용은 : " + resData.quiz);
+//            print("퀴즈의 정답은 : " + resData.answer);
+//            print("퀴즈의 해설은 : " + resData.comment);
+//        }
+//    }
+//    #endregion
 
-            if (isFileExist)
-            {
-                // 1. 파일 스트림을 읽기 모드로 연다.
-                FileStream fs = new FileStream(fullPath, FileMode.Open, FileAccess.Read);
+//    #region PostCount()
+//    // 서버에 현재까지의 퀴즈 진행도?를 전달(업데이트) 한다.
+//    //public void PostCount()
+//    //{
+//    //    StartCoroutine(PostQuizCount());
+//    //}
 
-                // 2. 스트림으로부터 데이터(byte)를 읽어온다.
-                StreamReader sr = new StreamReader(fs, Encoding.UTF8);
-                readText = sr.ReadToEnd();
-            }
-            else
-            {
-                readText = "그런 파일 없어욧!";
-            }
-        }
-        else
-        {
-            readText = "그런 경로 없어욧!";
-        }
+//    //IEnumerator PostQuizCount(string url)
+//    //{
+//    //    // 1. 퀴즈 진행도를 Json 데이터로 변환하기
+//    //    CountReq countData = new CountReq();
+//    //    string countJsonData = JsonUtility.ToJson(countData, true);
 
-        // 3. 읽은 데이터를 string으로 변환해서 반환한다.
-        return readText;
-    }
-}
+//    //    // 2. Post를 하기 위한 준비를 한다.
+
+
+//    //    // 3. 서버에 Post를 전송하고 응답이 올 때까지 기다린다.
+
+
+//    //}
+
+//    #endregion
+
+
+//    // text 데이터를 파일로 저장하기
+//    public void SaveJsonData(string json, string path, string fileName)
+//    {
+//        // 1. 파일 스트림을 쓰기 형태로 연다.
+//        //string fullPath = path + "/" + fileName;
+//        string fullPath = Path.Combine(path, fileName);
+//        FileStream fs = new FileStream(fullPath, FileMode.OpenOrCreate, FileAccess.Write);
+
+//        // 2. 스트림에 json 데이터를 쓰기로 전달한다.
+//        byte[] jsonBinary = Encoding.UTF8.GetBytes(json);
+//        fs.Write(jsonBinary);
+
+//        // 3. 스트림을 닫아준다.
+//        fs.Close();
+//    }
+
+//    // text 파일을 읽어오기
+//    public string ReadJsonData(string path, string fileName)
+//    {
+//        string readText;
+//        string fullPath = Path.Combine(path, fileName);
+
+//        // 예외 처리 : 해당 경로에 값이 파일이 존재하는지를 먼저 확인한다.
+//        bool isDirectoryExist = Directory.Exists(path);
+
+//        if (isDirectoryExist)
+//        {
+//            bool isFileExist = File.Exists(fullPath);
+
+//            if (isFileExist)
+//            {
+//                // 1. 파일 스트림을 읽기 모드로 연다.
+//                FileStream fs = new FileStream(fullPath, FileMode.Open, FileAccess.Read);
+
+//                // 2. 스트림으로부터 데이터(byte)를 읽어온다.
+//                StreamReader sr = new StreamReader(fs, Encoding.UTF8);
+//                readText = sr.ReadToEnd();
+//            }
+//            else
+//            {
+//                readText = "그런 파일 없어욧!";
+//            }
+//        }
+//        else
+//        {
+//            readText = "그런 경로 없어욧!";
+//        }
+
+//        // 3. 읽은 데이터를 string으로 변환해서 반환한다.
+//        return readText;
+//    }
+//}
