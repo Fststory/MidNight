@@ -172,7 +172,7 @@ public class QuizManagerKYH : MonoBehaviour
     public Text quiz, answer, comment, answerTitle, commentTitle, timer;
 
     bool timerStart = false;
-    float currentTime = 5.0f;
+    public float currentTime = 5.0f;
 
     void Start()
     {
@@ -185,7 +185,7 @@ public class QuizManagerKYH : MonoBehaviour
         {
             currentTime -= Time.deltaTime;
             timer.text = Mathf.FloorToInt(currentTime).ToString();
-            if (currentTime < 0.0f)
+            if (currentTime <= 0.0f)
             {
                 timerStart = false;
                 currentTime = 5.0f;

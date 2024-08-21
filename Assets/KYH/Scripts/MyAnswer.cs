@@ -58,6 +58,11 @@ public class MyAnswer : MonoBehaviour
             }
         }
         quizManagerKYH.PutCount();      // 채점 후 서버 DB에 Put Count 한다.
+        Invoke("NextQuiz", 5.0f);
+    }
+
+    void NextQuiz()
+    {
         quizManagerKYH.GetQuiz();       // 이어서 다음 문제를 받아온다.
     }
 
