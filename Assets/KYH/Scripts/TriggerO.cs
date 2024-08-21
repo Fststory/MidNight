@@ -21,6 +21,7 @@ public class TriggerO : MonoBehaviour
                 {
                     quizManagerKYH.countReq.correct++;      // 맞춘 수를 +1 한다.
                     print("정답은 O 이고 맞췄습니다!");
+                    quizEnum.shopManager.playerPoints += 50;
                 }
                 quizEnum.answerCheck = true;            // 정답 체크를 했다고 표시한다.
             }

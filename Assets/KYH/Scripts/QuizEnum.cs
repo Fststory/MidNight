@@ -7,8 +7,10 @@ public class QuizEnum : MonoBehaviour
     // 발판에 올라가 있는지 & 어떤 발판에 올라가 있는지 판단
     // 퀴즈 정답 체크했는지도 판단
 
+    public ShopManager shopManager;     // ShopManager를 받아와서 문제를 맞추면 포인트를 누적시킨다.
+
     // 퀴즈 타이머 퀴즈 시간마다 정답을 체크 후 체크했는지를 초기화
-    float currentTime = 0;
+    public float currentTime = 0;
     public float quizTime;
 
     public enum TriggerType

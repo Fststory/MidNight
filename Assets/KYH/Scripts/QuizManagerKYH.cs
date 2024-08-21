@@ -144,12 +144,12 @@ public class QuizRes33
 #region POST / Count - 퀴즈에 대한 카운트를 업데이트
 public struct CountReq
 {
-    public int number;
+    public int id;
     public int correct;
     public int players;
-    public CountReq(int number, int correct, int players)
+    public CountReq(int id, int correct, int players)
     {
-        this.number = number;
+        this.id = id;
         this.correct = correct;
         this.players = players;
     }
@@ -158,7 +158,8 @@ public struct CountReq
 
 public class QuizManagerKYH : MonoBehaviour
 {
-    public string url;
+    public string getUrl;
+    public string postUrl;
     public QuizRes resData;
     public CountReq countReq = new CountReq();      // 전달할 Request의 인스턴스 생성
 
@@ -237,7 +238,7 @@ public class QuizManagerKYH : MonoBehaviour
     // 서버에서 *랜덤*한 퀴즈를 받아온다. 이후 화면에 받아온 문제를 띄우는 것까지 해야된다.
     public void GetQuiz()
     {
-        StartCoroutine(GetRandomQuiz(url));
+        StartCoroutine(GetRandomQuiz(getUrl));
     }
 
     IEnumerator GetRandomQuiz(string url)       
@@ -246,6 +247,7 @@ public class QuizManagerKYH : MonoBehaviour
             1. 서버에서 받아온 문제들을 리스트에 넣고 리스트 인덱스를 랜덤으로 골라서 화면에 출력
             2. 애초에 서버에서 랜덤으로 뽑아올 수 있다면..?
 
+        => 서버에서 랜덤 문제 뿌려주기로 했음!!
 
             화면 출력은 UI 캔버스의 텍스트에 각각의 정보를 대입해주면 된다.
         */
@@ -266,10 +268,10 @@ public class QuizManagerKYH : MonoBehaviour
             QuizRes33 resData1 = JsonUtility.FromJson<QuizRes33>(result);
             resData = resData1.result.quiz;
 
-            print("퀴즈의 번호는 : " + resData.id);
-            print("퀴즈의 내용은 : " + resData.quiz);
-            print("퀴즈의 정답은 : " + resData.answer);
-            print("퀴즈의 해설은 : " + resData.comment);
+            //print("퀴즈의 번호는 : " + resData.id);
+            //print("퀴즈의 내용은 : " + resData.quiz);
+            //print("퀴즈의 정답은 : " + resData.answer);
+            //print("퀴즈의 해설은 : " + resData.comment);
             id.text = resData.id.ToString();
             quiz.text = resData.quiz;
             answer.text = resData.answer.ToString();
@@ -282,7 +284,7 @@ public class QuizManagerKYH : MonoBehaviour
     // 서버에 현재까지의 퀴즈 진행도?를 전달(업데이트) 한다.
     public void PostCount()
     {
-        StartCoroutine(PostQuizCount(url));
+        StartCoroutine(PostQuizCount(postUrl));
     }
 
     IEnumerator PostQuizCount(string url)
@@ -290,14 +292,17 @@ public class QuizManagerKYH : MonoBehaviour
         // 1. 퀴즈 진행도를 Json 데이터로 변환하기
 
         // CountReq 인스턴스(countData)에 Post할 내용을 기록해야 됨
-        countReq.number = resData.id;                                       // 문제의 번호
-        /*countReq.correct =      ; */                                      // 문제를 맞춘 사람의 수 (Trigger에서 판단해서 전달해 줌)
-        countReq.players = players.playerObjects.Count;                     // 현재 플레이 중인 사람의 수
+        countReq.id = resData.id;                                       // 문제의 번호
+        /*countReq.correct =      ; */                                  // 문제를 맞춘 사람의 수 (Trigger에서 판단해서 전달해 줌)
+        countReq.players = players.playerObjects.Count;      
+        // 현재 플레이 중인 사람의 수
 
         string countJsonData = JsonUtility.ToJson(countReq, true);     // 인스턴스를 Json으로 바꾼다.
 
+        print(countJsonData);
+
         // 2. Post를 하기 위한 준비를 한다.
-        UnityWebRequest request = UnityWebRequest.Post(url, countJsonData, "application/json");
+        UnityWebRequest request = UnityWebRequest.Put(url, countJsonData);
 
         // 3. 서버에 Post를 전송하고 응답이 올 때까지 기다린다.
         yield return request.SendWebRequest();
