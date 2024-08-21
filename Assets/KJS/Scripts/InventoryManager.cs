@@ -18,6 +18,8 @@ public class InventoryManager : MonoBehaviour
     public GameObject inventoryPanel;  // 인벤토리 UI 패널
     public List<InventorySlot> inventorySlots = new List<InventorySlot>();  // 인벤토리 슬롯 리스트
     private Equipment equipment;  // Equipment 스크립트 참조
+    public AudioSource audioSource;  // 사운드를 재생할 AudioSource
+    public AudioClip toggleSound;    // UI 전환 시 재생할 사운드 클립
 
     void Start()
     {
@@ -70,12 +72,13 @@ public class InventoryManager : MonoBehaviour
         {
             bool isActive = inventoryPanel.activeSelf;
             inventoryPanel.SetActive(!isActive);
-            Debug.Log("Inventory UI toggled. Now active: " + !isActive);
+            // 사운드 재생
+            if (audioSource != null && toggleSound != null)
+            {
+                audioSource.PlayOneShot(toggleSound);
+            }
         }
-        else
-        {
-            Debug.LogError("Inventory Panel is not assigned in the inspector!");
-        }
+        
     }
 
     // 인벤토리에 아이템 추가 (아이콘과 버튼 이미지 활성화)
