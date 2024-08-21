@@ -9,14 +9,25 @@ using static UnityEditor.Progress;
 public class ShopManager : MonoBehaviour
 {
     public Text playerPointsText;
+    public Text insufficientPointsText; // 포인트 부족 메시지를 표시할 텍스트 UI
     public GameObject shopUICanvas;  // 상점 UI 전체를 담고 있는 Canvas
     public InventoryManager inventoryManager;
 
     private int playerPoints = 200;
+    private float fadeDuration = 2f; // 서서히 사라지는 시간
+    private float displayDuration = 1f; // 글자가 완전히 보이는 시간
+
+    private Coroutine fadeOutCoroutine; // 현재 실행 중인 코루틴을 추적
 
     void Start()
     {
         UpdatePlayerPointsText();
+
+        // 포인트 부족 텍스트를 비활성화 (초기 상태)
+        if (insufficientPointsText != null)
+        {
+            insufficientPointsText.gameObject.SetActive(false);
+        }
 
         // 게임 시작 시 모든 Panel을 비활성화
         if (shopUICanvas != null)
@@ -85,6 +96,21 @@ public class ShopManager : MonoBehaviour
         if (playerPoints < item.price)
         {
             Debug.LogWarning("Not enough points to purchase this item.");
+
+            // 포인트 부족 텍스트 표시
+            if (insufficientPointsText != null)
+            {
+                insufficientPointsText.gameObject.SetActive(true);
+                insufficientPointsText.color = new Color(insufficientPointsText.color.r, insufficientPointsText.color.g, insufficientPointsText.color.b, 1f);
+
+                // 기존에 실행 중인 코루틴이 있으면 중지하고 새로운 코루틴 시작
+                if (fadeOutCoroutine != null)
+                {
+                    StopCoroutine(fadeOutCoroutine);
+                }
+                fadeOutCoroutine = StartCoroutine(FadeOutText());
+            }
+
             return false; // 구매 실패
         }
 
@@ -111,6 +137,28 @@ public class ShopManager : MonoBehaviour
         }
 
         return true; // 구매 성공
+    }
+
+    private IEnumerator FadeOutText()
+    {
+        // 1초 동안 텍스트가 완전히 보이도록 유지
+        yield return new WaitForSeconds(displayDuration);
+
+        float startAlpha = insufficientPointsText.color.a;
+        float rate = 1.0f / fadeDuration;
+        float progress = 0.0f;
+
+        // 텍스트가 서서히 사라지게 만듭니다.
+        while (progress < 1.0f)
+        {
+            Color tempColor = insufficientPointsText.color;
+            insufficientPointsText.color = new Color(tempColor.r, tempColor.g, tempColor.b, Mathf.Lerp(startAlpha, 0, progress));
+            progress += rate * Time.deltaTime;
+            yield return null;
+        }
+
+        insufficientPointsText.gameObject.SetActive(false);
+        fadeOutCoroutine = null; // 코루틴이 끝나면 null로 설정
     }
 
     private void UpdatePlayerPointsText()
