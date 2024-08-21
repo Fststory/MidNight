@@ -169,11 +169,28 @@ public class QuizManagerKYH : MonoBehaviour
 
     public FindPlayers players;
 
-    public Text id, quiz, answer, comment, answerTitle, commentTitle;
+    public Text quiz, answer, comment, answerTitle, commentTitle, timer;
+
+    bool timerStart = false;
+    float currentTime = 5.0f;
 
     void Start()
     {
         GetQuiz();
+    }
+
+    private void Update()
+    {
+        if (timerStart)
+        {
+            currentTime -= Time.deltaTime;
+            timer.text = Mathf.FloorToInt(currentTime).ToString();
+            if (currentTime < 0.0f)
+            {
+                timerStart = false;
+                currentTime = 5.0f;
+            }
+        }
     }
 
     #region GetList() 연습
@@ -222,7 +239,7 @@ public class QuizManagerKYH : MonoBehaviour
     //    //        // byte 배열로 된 raw 데이터를 텍스쳐 형태로 변환해서 texture2D 인스턴스로 변환한다.
     //    //        texture.LoadImage(binaries);
     //    //        img_response.texture = texture;
-        
+
     //    //    }
     //    //}
     //    //// 그렇지 않다면...
@@ -267,12 +284,20 @@ public class QuizManagerKYH : MonoBehaviour
             // 5. 응답 받은 json 데이터를 QuizRes 구조체 형태로 인스턴스에 파싱한다.
             QuizRes33 resData1 = JsonUtility.FromJson<QuizRes33>(result);
             resData = resData1.result.quiz;
-
-            id.text = resData.id.ToString();
+                    
             quiz.text = resData.quiz;
-            answer.text = resData.answer.ToString();
+            if (resData.answer)
+            {
+                answer.text = "O";
+            }
+            else if (!resData.answer)
+            {
+                answer.text = "X";
+            }
+            //answer.text = resData.answer.ToString();
             comment.text = resData.comment;
-            
+
+            timerStart = true;
             Invoke("OpenAnswer", 5.0f);     // 5초의 카운트 후 정답과 해설을 공개한다. **************************************************
         }
     }
