@@ -14,11 +14,10 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/../../1th_last/Assets/Scripts/PlayerController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/BYS/CameraController.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/BYS/CameraMove.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/BYS/CameraPMove.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$USER_HOME$/Downloads/CameraMove.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$USER_HOME$/Downloads/CameraPMove.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$USER_HOME$/Downloads/CameraPMove.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
@@ -96,7 +95,9 @@
       <workItem from="1724149549793" duration="6316000" />
       <workItem from="1724164343903" duration="116000" />
       <workItem from="1724164486459" duration="3620000" />
-      <workItem from="1724201842012" duration="7681000" />
+      <workItem from="1724201842012" duration="10476000" />
+      <workItem from="1724221292680" duration="760000" />
+      <workItem from="1724222099842" duration="1952000" />
     </task>
     <servers />
   </component>

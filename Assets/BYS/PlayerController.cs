@@ -31,4 +31,4 @@ public class PlayerController : MonoBehaviour
             transform.forward = moveDirection;
         }
     }
-}
+} 
