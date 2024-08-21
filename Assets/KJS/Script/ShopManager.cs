@@ -12,7 +12,7 @@ public class ShopManager : MonoBehaviour
     public GameObject shopUICanvas;  // 상점 UI 전체를 담고 있는 Canvas
     public InventoryManager inventoryManager;
 
-    private int playerPoints = 200;
+    public int playerPoints = 0;
 
     void Start()
     {

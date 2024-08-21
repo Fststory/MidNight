@@ -9,7 +9,6 @@ public class TriggerX : MonoBehaviour
     public TriggerO triO;
     public bool isOnX = false;
 
-
     void Update()
     {
         if (!quizEnum.answerCheck)      // 만약, 정답 체크를 안 했다면 트리거에 있는지 판단한다.
@@ -20,6 +19,7 @@ public class TriggerX : MonoBehaviour
                 {
                     quizManagerKYH.countReq.correct++;      // 맞춘 수를 +1 한다.
                     print("정답은 X 이고 맞췄습니다!");
+                    quizEnum.shopManager.playerPoints += 50;
                 }
                 quizEnum.answerCheck = true;            // 정답 체크를 했다고 표시한다.
             }
