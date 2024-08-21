@@ -26,6 +26,8 @@ namespace Supercyan.FreeSample
 
         [SerializeField] private ControlMode m_controlMode = ControlMode.Direct;
 
+        [SerializeField] public AudioSource footSound;
+
         private float m_currentV = 0;
         private float m_currentH = 0;
 
@@ -200,6 +202,7 @@ namespace Supercyan.FreeSample
                 m_rigidBody.velocity = m_currentDirection * m_moveSpeed;
 
                 m_animator.SetFloat("MoveSpeed", direction.magnitude);
+                footSound.volume = direction.magnitude;
             }
 
             JumpingAndLanding();

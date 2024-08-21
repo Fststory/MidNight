@@ -166,6 +166,11 @@ public class QuizManagerKYH : MonoBehaviour
 
     public Text quiz, answer, comment, answerTitle, commentTitle, timer;
 
+    public AudioClip correctSound;
+    public AudioClip wrongSound;
+    public AudioClip quizSound;
+    public AudioSource audioSource;
+
     bool timerStart = false;
     public float initialTime; // 인스펙터에서 설정할 수 있는 초기 시간
     public float nextTime;  // 다음 퀴즈가 나오는 시간
@@ -296,6 +301,9 @@ public class QuizManagerKYH : MonoBehaviour
             //answer.text = resData.answer.ToString();
             comment.text = resData.comment;
 
+            audioSource.clip = quizSound;
+            audioSource.Play();
+
             timerStart = true;
             Invoke("OpenAnswer1", initialTime);     // 설정된 시간만큼 카운트 후 정답을 공개한다.
             Invoke("OpenAnswer2", initialTime + 2.0f);      // 정답 공개 후 2초 뒤 해설을 공개한다.
@@ -306,13 +314,13 @@ public class QuizManagerKYH : MonoBehaviour
     {
         answerTitle.color = new Color(0, 0, 0, 1);
         answer.color = new Color(0, 0, 0, 1);
+        myAns.checkTime = true;
     }
 
     void OpenAnswer2()
     {
         commentTitle.color = new Color(0, 0, 0, 1);
         comment.color = new Color(0, 0, 0, 1);
-        myAns.checkTime = true;
     }
     #endregion
 
@@ -330,7 +338,7 @@ public class QuizManagerKYH : MonoBehaviour
         // CountReq 인스턴스(countData)에 Put할 내용을 기록해야 됨
         countReq.id = resData.id;                                       // 문제의 번호
         /*countReq.correct =      ; */                                  // 문제를 맞춘 사람의 수 (MyAnswer.AnswerCheck()에서 판단해서 전달해 줌)
-        countReq.players = players.playerObjects.Count;                 // 현재 플레이 중인 사람의 수
+        countReq.players = 1; //players.playerObjects.Count;                 // 현재 플레이 중인 사람의 수
 
         string countJsonData = JsonUtility.ToJson(countReq, true);     // 인스턴스를 Json으로 바꾼다.
 

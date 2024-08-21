@@ -43,6 +43,14 @@ public class MyAnswer : MonoBehaviour
                     quizManagerKYH.countReq.correct++;      // 맞춘 수를 +1 한다.
                     shopManager.playerPoints += 50;         // 재화 50 획득!
                     print("정답은 O 이고 맞췄습니다!");
+
+                    quizManagerKYH.audioSource.clip = quizManagerKYH.correctSound;
+                    quizManagerKYH.audioSource.Play();
+                }
+                else
+                {
+                    quizManagerKYH.audioSource.clip = quizManagerKYH.wrongSound;
+                    quizManagerKYH.audioSource.Play();
                 }
             }
             else if (quizManagerKYH.resData.answer == false)  // 퀴즈의 정답이 X 라면..
@@ -52,6 +60,14 @@ public class MyAnswer : MonoBehaviour
                     quizManagerKYH.countReq.correct++;      // 맞춘 수를 +1 한다.
                     shopManager.playerPoints += 50;         // 재화 50 획득!
                     print("정답은 X 이고 맞췄습니다!");
+
+                    quizManagerKYH.audioSource.clip = quizManagerKYH.correctSound;
+                    quizManagerKYH.audioSource.Play();
+                }
+                else
+                {
+                    quizManagerKYH.audioSource.clip = quizManagerKYH.wrongSound;
+                    quizManagerKYH.audioSource.Play();
                 }
             }
         }
@@ -70,11 +86,14 @@ public class MyAnswer : MonoBehaviour
         {
             myAnswerType = MyAnswer.MyAnswerType.O;
             isOn = true;      // 트리거에 올라와 있다고 체크
+
+            other.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", new Color(20, 20, 20, 20));
         }
         else if (other.CompareTag("TriggerX"))
         {
             myAnswerType = MyAnswer.MyAnswerType.X;
             isOn = true;      // 트리거에 올라와 있다고 체크
+            other.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", new Color(20, 20, 20, 20));
         }
     }
 
@@ -84,6 +103,7 @@ public class MyAnswer : MonoBehaviour
         {
             myAnswerType = MyAnswer.MyAnswerType.None;
             isOn = false;
+            other.GetComponent<MeshRenderer>().material.SetColor("_EmissionColor", new Color(1, 1, 1, 1));
         }
     }
 }
